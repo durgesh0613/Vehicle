@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="@dimen/standard_margin"
+    android:layout_marginRight="@dimen/standard_margin"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal"
+    android:showDividers="middle">
+
+    <FrameLayout
+        android:id="@+id/leftLayoutContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        android:layout_weight="1"
+
+        <include layout="@layout/vehicle_left_layout" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/vehicle_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        android:layout_weight="1"
+
+    </FrameLayout>
+
+</LinearLayout>
