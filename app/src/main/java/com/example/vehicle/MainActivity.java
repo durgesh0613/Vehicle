@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.vehicle.content.DataUtils;
 import com.example.vehicle.tasks.GetVehicleDetails;
 
 import java.util.ArrayList;
@@ -70,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 vehicleModelIds.clear();
                 Integer selectedId = vehicleMakeIds.get(position);
                 loadProgressBar();
-                new GetVehicleDetails(progressDialog, getApplicationContext(), vehicleModelList,
-                        vehicleModelIds, vehicleModel, modelUrl + selectedId, "model", null).execute();
+                new GetVehicleDetails(progressDialog, MainActivity.this, vehicleModelList,
+                        vehicleModelIds, vehicleModel, modelUrl + selectedId, "model", null, MainActivity.this).execute();
             }
 
             @Override
@@ -88,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
                 Integer makeId = vehicleMakeIds.get(vehicleMake.getSelectedItemPosition());
                 Integer modelId = vehicleModelIds.get(position);
                 String zipCode = "92603";
-                new GetVehicleDetails(progressDialog, getApplicationContext(), vehicleModelList,
+                new GetVehicleDetails(progressDialog, MainActivity.this, vehicleModelList,
                         vehicleModelIds, rv, detailsUrl + makeId + "/" + modelId
-                        + "/" + zipCode  , "details", vehicleDetails).execute();
+                        + "/" + zipCode, "details", vehicleDetails, MainActivity.this).execute();
                 //rv.setAdapter(new SimpleItemRecyclerViewAdapter(vehicleDetails));
             }
 
@@ -101,18 +99,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loadProgressBar();
-        new GetVehicleDetails(progressDialog, getApplicationContext(), vehicleMakeList,
-                vehicleMakeIds, vehicleMake, makeUrl, "vehicle_make", null).execute();
+        new GetVehicleDetails(progressDialog, MainActivity.this, vehicleMakeList,
+                vehicleMakeIds, vehicleMake, makeUrl, "vehicle_make", null, MainActivity.this).execute();
     }
 
-    private void loadProgressBar(){
+    private void loadProgressBar() {
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
-    public RecyclerView.Adapter returnAdapter(ArrayList<HashMap<String, String>> vehicleDetails){
+    public RecyclerView.Adapter returnAdapter(ArrayList<HashMap<String, String>> vehicleDetails) {
         return new SimpleItemRecyclerViewAdapter(vehicleDetails);
     }
 
@@ -137,8 +135,7 @@ public class MainActivity extends AppCompatActivity {
             String make = holder.mItem.get("vehicle_make");
             String model = holder.mItem.get("model");
             String id = holder.mItem.get("id");
-            holder.mContentView.setText(make + model + " - " + id );
-
+            holder.mContentView.setText(make + model + " - " + id);
             holder.mView.setOnClickListener(v -> {
                 int selectedCar = holder.getAdapterPosition();
                 if (mTwoPane) {

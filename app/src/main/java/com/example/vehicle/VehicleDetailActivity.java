@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.vehicle.content.DataUtils;
 import com.example.vehicle.tasks.GetVehicleImage;
 
 import java.util.HashMap;

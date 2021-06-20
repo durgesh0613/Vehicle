@@ -31,8 +31,9 @@ public class GetVehicleDetails extends AsyncTask<Void, Void, Void> {
     private ViewGroup component;
     private String apiUrl;
     private String type;
+    private MainActivity mainActivity;
 
-    public GetVehicleDetails(ProgressDialog progressDialog, Context context, ArrayList<String> vehicleList, ArrayList<Integer> vehicleIds, ViewGroup component, String apiUrl, String type, ArrayList<HashMap<String,String>> vehicleDetails){
+    public GetVehicleDetails(ProgressDialog progressDialog, Context context, ArrayList<String> vehicleList, ArrayList<Integer> vehicleIds, ViewGroup component, String apiUrl, String type, ArrayList<HashMap<String, String>> vehicleDetails, MainActivity mainActivity) {
         this.progressDialog = progressDialog;
         this.context = context;
         this.vehicleList = vehicleList;
@@ -41,67 +42,68 @@ public class GetVehicleDetails extends AsyncTask<Void, Void, Void> {
         this.type = type;
         this.vehicleIds = vehicleIds;
         this.vehicleDetails = vehicleDetails;
+        this.mainActivity = mainActivity;
     }
 
     @Override
-        protected void onPostExecute(Void result){
-            super.onPostExecute(result);
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
 
-            if(progressDialog.isShowing()){
-                progressDialog.dismiss();
-            }
-
-            if(!type.equalsIgnoreCase("details")) {
-                ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, vehicleList);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                ((Spinner)component).setAdapter(adapter);
-            }else{
-                ((RecyclerView)component).setAdapter(new MainActivity().returnAdapter(vehicleDetails));
-                if(vehicleDetails.isEmpty()){
-                    Toast.makeText(context, "The URL returned no results", Toast.LENGTH_LONG).show();
-                }
-            }
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
         }
 
-        @Override
-        protected Void doInBackground(Void... voids){
-            if(type.equalsIgnoreCase("details")){
-                gatherDetails();
-                return null;
+        if (!type.equalsIgnoreCase("details")) {
+            ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, vehicleList);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ((Spinner) component).setAdapter(adapter);
+        } else {
+            ((RecyclerView) component).setAdapter(this.mainActivity.returnAdapter(vehicleDetails));
+            if (vehicleDetails.isEmpty()) {
+                Toast.makeText(context, "The URL returned no results", Toast.LENGTH_LONG).show();
             }
-            HttpHandler sh = new HttpHandler();
-            String jsonString = sh.makeServiceCall(apiUrl);
+        }
+    }
 
-            if(jsonString!=null){
-                try {
-                    JSONArray names = new JSONArray(jsonString);
-
-                    for(int i = 0; i<names.length(); i++){
-                        JSONObject d = names.getJSONObject(i);
-                        String id = d.getString("id");
-                        String name = d.getString(type);
-
-                        vehicleIds.add(Integer.parseInt(id));
-                        vehicleList.add(name);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
+    @Override
+    protected Void doInBackground(Void... voids) {
+        if (type.equalsIgnoreCase("details")) {
+            gatherDetails();
             return null;
         }
+        HttpHandler sh = new HttpHandler();
+        String jsonString = sh.makeServiceCall(apiUrl);
+
+        if (jsonString != null) {
+            try {
+                JSONArray names = new JSONArray(jsonString);
+
+                for (int i = 0; i < names.length(); i++) {
+                    JSONObject d = names.getJSONObject(i);
+                    String id = d.getString("id");
+                    String name = d.getString(type);
+
+                    vehicleIds.add(Integer.parseInt(id));
+                    vehicleList.add(name);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return null;
+    }
 
     private void gatherDetails() {
         HttpHandler sh = new HttpHandler();
         String jsonString = sh.makeServiceCall(apiUrl);
 
-        if(jsonString!=null){
+        if (jsonString != null) {
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray lists = jsonObject.getJSONArray("lists");
 
-                for(int i = 0; i<lists.length(); i++){
+                for (int i = 0; i < lists.length(); i++) {
                     JSONObject d = lists.getJSONObject(i);
                     HashMap<String, String> vehicle = new HashMap<>();
 

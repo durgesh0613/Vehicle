@@ -96,7 +96,7 @@ public class VehicleDetailFragment extends Fragment {
     }
 
     private void loadProgressBar(){
-        progressDialog = new ProgressDialog(getActivity().getApplicationContext());
+        progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
