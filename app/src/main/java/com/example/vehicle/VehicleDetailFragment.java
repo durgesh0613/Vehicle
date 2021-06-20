@@ -1,14 +1,19 @@
 package com.example.vehicle;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.vehicle.content.SongUtils;
+import com.example.vehicle.content.DataUtils;
+import com.example.vehicle.tasks.GetVehicleImage;
+
+import java.util.HashMap;
 
 
 /**
@@ -17,7 +22,8 @@ import com.example.vehicle.content.SongUtils;
  * create an instance of this fragment.
  */
 public class VehicleDetailFragment extends Fragment {
-    public SongUtils.Song mSong;
+    public HashMap<String, String> car;
+    ProgressDialog progressDialog;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,8 +63,8 @@ public class VehicleDetailFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }*/
-        if (getArguments().containsKey(SongUtils.SONG_ID_KEY)) {
-            mSong = SongUtils.SONG_ITEMS.get(getArguments().getInt(SongUtils.SONG_ID_KEY));
+        if (getArguments().containsKey("selectedCar")) {
+            car = (HashMap<String, String>) getArguments().getSerializable("selectedCar");
         }
     }
 
@@ -68,18 +74,32 @@ public class VehicleDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.vehicle_detail, container, false);
         //Shows the detail info in a TextView
-        if (mSong != null) {
-            ((TextView) root.findViewById(R.id.vehicle_detail)).setText(mSong.details);
+        if (car != null) {
+            ((TextView) root.findViewById(R.id.txtPrice)).setText(car.get("price"));
+            ((TextView) root.findViewById(R.id.txtMakeModel)).setText(car.get("vehicle_make") +
+                    " - " + car.get("model"));
+            ((TextView) root.findViewById(R.id.txtLastUpdate)).setText(car.get("created_at"));
+            ImageView imgVehicle = ((ImageView) root.findViewById(R.id.imgVehicle));
+            loadProgressBar();
+            new GetVehicleImage(getActivity().getApplicationContext(), imgVehicle, progressDialog)
+                    .execute(car.get("vehicle_url"));
         }
 
         return root;
     }
 
-    public static VehicleDetailFragment newInstance(int selectedSong) {
+    public static VehicleDetailFragment newInstance(HashMap<String, String> selectedCar) {
         VehicleDetailFragment frg = new VehicleDetailFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(SongUtils.SONG_ID_KEY, selectedSong);
+        arguments.putSerializable("selectedCar", selectedCar);
         frg.setArguments(arguments);
         return frg;
+    }
+
+    private void loadProgressBar(){
+        progressDialog = new ProgressDialog(getActivity().getApplicationContext());
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 }
