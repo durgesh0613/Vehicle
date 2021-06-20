@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vehicle.MainActivity;
+import com.example.vehicle.R;
 import com.example.vehicle.content.HttpHandler;
 
 import org.json.JSONArray;
@@ -22,7 +23,6 @@ import java.util.HashMap;
 
 public class GetVehicleDetails extends AsyncTask<Void, Void, Void> {
 
-
     private ProgressDialog progressDialog;
     private Context context;
     private ArrayList<String> vehicleList;
@@ -33,7 +33,11 @@ public class GetVehicleDetails extends AsyncTask<Void, Void, Void> {
     private String type;
     private MainActivity mainActivity;
 
-    public GetVehicleDetails(ProgressDialog progressDialog, Context context, ArrayList<String> vehicleList, ArrayList<Integer> vehicleIds, ViewGroup component, String apiUrl, String type, ArrayList<HashMap<String, String>> vehicleDetails, MainActivity mainActivity) {
+    public GetVehicleDetails(ProgressDialog progressDialog, Context context, ArrayList<String>
+            vehicleList, ArrayList<Integer> vehicleIds, ViewGroup component, String apiUrl,
+                             String type, ArrayList<HashMap<String, String>> vehicleDetails,
+                             MainActivity mainActivity){
+
         this.progressDialog = progressDialog;
         this.context = context;
         this.vehicleList = vehicleList;
@@ -54,13 +58,15 @@ public class GetVehicleDetails extends AsyncTask<Void, Void, Void> {
         }
 
         if (!type.equalsIgnoreCase("details")) {
-            ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, vehicleList);
+            ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item,
+                    vehicleList);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             ((Spinner) component).setAdapter(adapter);
         } else {
             ((RecyclerView) component).setAdapter(this.mainActivity.returnAdapter(vehicleDetails));
             if (vehicleDetails.isEmpty()) {
-                Toast.makeText(context, "The URL returned no results", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.no_results, Toast.LENGTH_LONG)
+                        .show();
             }
         }
     }
@@ -77,7 +83,7 @@ public class GetVehicleDetails extends AsyncTask<Void, Void, Void> {
         if (jsonString != null) {
             try {
                 JSONArray names = new JSONArray(jsonString);
-
+                //Extracting the vehicle ids and names
                 for (int i = 0; i < names.length(); i++) {
                     JSONObject d = names.getJSONObject(i);
                     String id = d.getString("id");
@@ -94,6 +100,7 @@ public class GetVehicleDetails extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
+    //Method to gather details of vehicle according to make and model
     private void gatherDetails() {
         HttpHandler sh = new HttpHandler();
         String jsonString = sh.makeServiceCall(apiUrl);

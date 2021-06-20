@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 
+//Reference: tutorialspoint.com
 public class GetVehicleImage extends AsyncTask<String, Void, Bitmap> {
     ImageView imageView;
     Context context;

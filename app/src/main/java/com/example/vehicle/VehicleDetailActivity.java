@@ -30,10 +30,11 @@ public class VehicleDetailActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.txtMakeModel)).setText(car.get("vehicle_make") +
                     " - " + car.get("model"));
             ((TextView) findViewById(R.id.txtLastUpdate)).setText(car.get("created_at"));
+            ((TextView) findViewById(R.id.vehicle_detail)).setText(car.get("veh_description"));
             ImageView imgVehicle = ((ImageView) findViewById(R.id.imgVehicle));
             loadProgressBar();
             new GetVehicleImage(getApplicationContext(), imgVehicle, progressDialog)
-                    .execute(car.get("vehicle_url"));
+                    .execute(car.get("image_url"));
         }
 
     }

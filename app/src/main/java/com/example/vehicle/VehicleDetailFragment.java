@@ -78,10 +78,11 @@ public class VehicleDetailFragment extends Fragment {
             ((TextView) root.findViewById(R.id.txtMakeModel)).setText(car.get("vehicle_make") +
                     " - " + car.get("model"));
             ((TextView) root.findViewById(R.id.txtLastUpdate)).setText(car.get("created_at"));
+            ((TextView) root.findViewById(R.id.vehicle_detail)).setText(car.get("veh_description"));
             ImageView imgVehicle = ((ImageView) root.findViewById(R.id.imgVehicle));
             loadProgressBar();
             new GetVehicleImage(getActivity().getApplicationContext(), imgVehicle, progressDialog)
-                    .execute(car.get("vehicle_url"));
+                    .execute(car.get("image_url"));
         }
 
         return root;
@@ -90,6 +91,7 @@ public class VehicleDetailFragment extends Fragment {
     public static VehicleDetailFragment newInstance(HashMap<String, String> selectedCar) {
         VehicleDetailFragment frg = new VehicleDetailFragment();
         Bundle arguments = new Bundle();
+        //Passing the whole hashmap of vehicle details in order to render in details fragment
         arguments.putSerializable("selectedCar", selectedCar);
         frg.setArguments(arguments);
         return frg;
