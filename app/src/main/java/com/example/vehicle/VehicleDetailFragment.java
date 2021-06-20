@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.vehicle.content.DataUtils;
 import com.example.vehicle.tasks.GetVehicleImage;
 
 import java.util.HashMap;
