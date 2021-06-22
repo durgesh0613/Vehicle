@@ -74,7 +74,7 @@ public class VehicleDetailFragment extends Fragment {
         View root = inflater.inflate(R.layout.vehicle_detail, container, false);
         //Shows the detail info in a TextView
         if (car != null) {
-            ((TextView) root.findViewById(R.id.txtPrice)).setText(car.get("price"));
+            ((TextView) root.findViewById(R.id.txtPrice)).setText(car.get("price") + " USD");
             ((TextView) root.findViewById(R.id.txtMakeModel)).setText(car.get("vehicle_make") +
                     " - " + car.get("model"));
             ((TextView) root.findViewById(R.id.txtLastUpdate)).setText(car.get("created_at"));

@@ -26,7 +26,7 @@ public class VehicleDetailActivity extends AppCompatActivity {
         //Code showing the back arrow button in the action bar
         car = (HashMap<String, String>)getIntent().getSerializableExtra("selectedCar");
         if (car != null) {
-            ((TextView) findViewById(R.id.txtPrice)).setText(car.get("price"));
+            ((TextView) findViewById(R.id.txtPrice)).setText(car.get("price") + " USD");
             ((TextView) findViewById(R.id.txtMakeModel)).setText(car.get("vehicle_make") +
                     " - " + car.get("model"));
             ((TextView) findViewById(R.id.txtLastUpdate)).setText(car.get("created_at"));

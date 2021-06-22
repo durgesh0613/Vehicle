@@ -137,8 +137,9 @@ public class MainActivity extends AppCompatActivity {
             holder.mIdView.setText(String.valueOf(position + 1));
             String make = holder.mItem.get("vehicle_make");
             String model = holder.mItem.get("model");
-            String id = holder.mItem.get("id");
-            holder.mContentView.setText(make + model + " - " + id);
+            String color = holder.mItem.get("color");
+            String price = holder.mItem.get("price");
+            holder.mContentView.setText(make + model + " - " + color + " | " + price + " USD");
             holder.mView.setOnClickListener(v -> {
                 int selectedCar = holder.getAdapterPosition();
                 if (mTwoPane) {
